@@ -79,8 +79,6 @@ public class Punch {
     public String printOriginalTimestamp(){
         String s = "";
         
-        s = "#" + (this.getBadge()).getID();
-        
         switch (this.getPunchTypeID()){
             case 0:
                 s += " CLOCKED OUT: ";
