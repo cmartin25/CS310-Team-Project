@@ -1,7 +1,7 @@
 package edu.jsu.mcis.tas_sp20;
 
 import java.sql.*;
-import java.util.ArrayList;
+import java.util.GregorianCalendar;
 
 public class TASDatabase {
     
@@ -59,8 +59,9 @@ public class TASDatabase {
        }
    }
 
-   public void getPunch(int punch)
+   public Punch getPunch(int punch)
    {
+       Punch p = null;
        int id = 0;
        int terminalid = 0;
        int punchTypeid = 0;
@@ -71,7 +72,7 @@ public class TASDatabase {
        {
            /* Prepare Select Query */
                 
-            query = "SELECT * FROM punch WHERE punch = " + punch;
+            query = "SELECT * FROM tas.punch WHERE id = " + punch;
             
             pstSelect = conn.prepareStatement(query);
                 
@@ -138,10 +139,14 @@ public class TASDatabase {
             } catch (Exception e) {} }
             
         }
+       p = new Punch (terminalid, badgeid, originalTimeStamp, punchTypeid);
+       
+       return p;
     }
    
-    public void getBadge(String badge)
+    public Badge getBadge(String badge)
     {
+        Badge b = null;
         String id = null;
         String description = null;
         
@@ -149,7 +154,7 @@ public class TASDatabase {
        {
            /* Prepare Select Query */
                 
-            query = "SELECT * FROM badge WHERE id = '" + badge +  "'";
+            query = "SELECT * FROM badge WHERE id = " + badge;
             
             pstSelect = conn.prepareStatement(query);
                 
@@ -213,26 +218,29 @@ public class TASDatabase {
             } catch (Exception e) {} }
             
         }
+        b = new Badge(id, description);
+        
+        return b;
     }
     
-    public void getShift(int shift)
+    public Shift getShift(int shift)
     {
+        Shift s = null;
         String description = null;
-        String[] start = null;
-        String[] stop = null;
+        GregorianCalendar start = null;
+        GregorianCalendar stop = null;
         int interval = 0;
         int gracePeriod = 0;
         int dock = 0;
-        String[] lunchStart = null;
-        String[] lunchStop = null;
+        GregorianCalendar lunchStart = null;
+        GregorianCalendar lunchStop = null;
         int lunchDeduct = 0;
-        
         
         try
        {
            /* Prepare Select Query */
                 
-            query = "SELECT * FROM shift WHERE id =" + shift;
+            query = "SELECT * FROM shift WHERE id = " + shift;
             
             pstSelect = conn.prepareStatement(query);
                 
@@ -260,7 +268,15 @@ public class TASDatabase {
                     
                     while(resultset.next()) 
                     {
-                        //Here
+                        description = resultset.getString(2);
+                        start = resultset.
+                        stop = resultset.
+                        interval = resultset.getInt(5);
+                        gracePeriod = resultset.getInt(6);
+                        dock = resultset.getInt(7);
+                        lunchStart = resultset.
+                        lunchStop = resultset.
+                        lunchDeduct = resultset.getInt(10);
                     }
                 }
                 else 
@@ -295,6 +311,10 @@ public class TASDatabase {
             } catch (Exception e) {} }
             
         }
+        s = new Shift(shift, description, start, stop, interval,
+            gracePeriod, dock, lunchStart, lunchStop, lunchDeduct);
+        
+        return s;
     }
 }
 
