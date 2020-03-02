@@ -19,9 +19,10 @@ public class Badge {
     public String getBadgeDescription() {
         return badgeDescription;
     }
-
-    String getID() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
     
+    @Override
+    public String toString(){
+        String FullBadge = "#" + badgeID + " (" + badgeDescription + ")";
+        return FullBadge;
+    }
 }
