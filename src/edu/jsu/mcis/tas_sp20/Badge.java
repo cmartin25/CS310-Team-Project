@@ -22,8 +22,7 @@ public class Badge {
     
     @Override
     public String toString(){
-        String FullBadge = "#" + id + " (" + name + ")";
+        String FullBadge = "#" + badgeID + " (" + badgeDescription + ")";
         return FullBadge;
-    
+    }
 }
-
