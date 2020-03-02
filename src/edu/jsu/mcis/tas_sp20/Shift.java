@@ -107,7 +107,6 @@ public int getlunchdeduct() {
 public void setlunchdeduct(int lunchdeduct) {
 	this.lunchdeduct = lunchdeduct;
 }
-
-
+///
 
 }
