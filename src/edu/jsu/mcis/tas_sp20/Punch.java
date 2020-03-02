@@ -13,22 +13,18 @@ public class Punch {
     Punch(Badge badge, int terminalid, int punchtypeid){
         id = 0;   
         adjustmenttype = null;
-        
         this.terminalid = terminalid;
         this.badge = badge;
         this.punchtypeid = punchtypeid;
-        
         this.originaltimestamp = System.currentTimeMillis();
     }
     
     Punch(int terminalid, Badge badge, Long timestamp, int punchtypeid){
         id = 0;   
         adjustmenttype = null;
-        
         this.terminalid = terminalid;
         this.badge = badge;
         this.punchtypeid = punchtypeid;
-        
         this.originaltimestamp = timestamp;
     }
     
