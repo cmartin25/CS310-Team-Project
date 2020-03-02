@@ -20,5 +20,10 @@ public class Badge {
         return badgeDescription;
     }
     
+    @Override
+    public String toString(){
+        String FullBadge = "#" + id + " (" + name + ")";
+        return FullBadge;
+    
 }
 
