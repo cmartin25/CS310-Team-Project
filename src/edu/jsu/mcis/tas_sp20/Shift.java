@@ -1,21 +1,25 @@
 package edu.jsu.mcis.tas_sp20;
 
 import java.util.*;
+import java.time.LocalTime;
 
 public class Shift {
 
 private int id;
 private String description;
-private GregorianCalendar start; //these GregorianCalendar objects should only contain time values and only compared against their time instance variables!
-private GregorianCalendar stop;
+private LocalTime start;
+private LocalTime stop;
 private int interval;
 private int graceperiod;
 private int dock;
-private GregorianCalendar lunchstart;
-private GregorianCalendar lunchstop;
+private LocalTime lunchstart;
+private LocalTime lunchstop;
 private int lunchdeduct;
 
-public Shift(int id, String description, GregorianCalendar start, GregorianCalendar stop, int interval, int graceperiod, int dock, GregorianCalendar lunchstart, GregorianCalendar lunchstop, int lunchdeduct) {
+public Shift(int id, String description, LocalTime start, 
+        LocalTime stop, int interval, int graceperiod, int dock,
+        LocalTime lunchstart, LocalTime lunchstop,
+        int lunchdeduct) {
 	this.id = id;
 	this.description=description;
 	this.start = start;
@@ -44,19 +48,19 @@ public void setdescription(String description) {
 	this.description = description;
 }
 
-public GregorianCalendar getstart() {
+public LocalTime getstart() {
 	return this.start;
 }
 
-public void setstart(GregorianCalendar start) {
+public void setstart(LocalTime start) {
 	this.start = start;
 }
 
-public GregorianCalendar getstop() {
+public LocalTime getstop() {
 	return this.stop;
 }
 
-public void setstop(GregorianCalendar stop) {
+public void setstop(LocalTime stop) {
 	this.stop = stop;
 }
 
@@ -84,19 +88,19 @@ public void setdock(int dock) {
 	this.dock = dock;
 }
 
-public GregorianCalendar getlunchstart() {
-	return this.lunchstart;
+public LocalTime getlunchstart() {
+	return this.lunchstart = lunchstart;
 }
 
-public void setlunchstart(GregorianCalendar lunchstart) {
+public void setlunchstart(LocalTime lunchstart) {
 	this.lunchstart = lunchstart;
 }
 
-public GregorianCalendar getlunchstop() {
+public LocalTime getlunchstop() {
 	return this.lunchstop;
 }
 
-public void setlunchstop(GregorianCalendar lunchstop) {
+public void setlunchstop(LocalTime lunchstop) {
 	this.lunchstop = lunchstop;
 }
 

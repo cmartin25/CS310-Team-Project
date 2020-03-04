@@ -1,7 +1,7 @@
 package edu.jsu.mcis.tas_sp20;
 
 import java.sql.*;
-import java.util.GregorianCalendar;
+import java.time.LocalTime;
 
 public class TASDatabase {
     
@@ -139,7 +139,7 @@ public class TASDatabase {
             } catch (Exception e) {} }
             
         }
-       p = new Punch (terminalid, badgeid, originalTimeStamp, punchTypeid);
+       p = new Punch(id, terminalid, badgeid, originalTimeStamp, punchTypeid);
        
        return p;
     }
@@ -227,13 +227,13 @@ public class TASDatabase {
     {
         Shift s = null;
         String description = null;
-        GregorianCalendar start = null;
-        GregorianCalendar stop = null;
+        LocalTime start = null;
+        LocalTime stop = null;
         int interval = 0;
         int gracePeriod = 0;
         int dock = 0;
-        GregorianCalendar lunchStart = null;
-        GregorianCalendar lunchStop = null;
+        LocalTime lunchStart = null;
+        LocalTime lunchStop = null;
         int lunchDeduct = 0;
         
         try
@@ -269,13 +269,17 @@ public class TASDatabase {
                     while(resultset.next()) 
                     {
                         description = resultset.getString(2);
-                        start = resultset.
-                        stop = resultset.
+                        Time time = resultset.getTime(3);
+                        start = time.toLocalTime();
+                        Time time1 = resultset.getTime(4);
+                        stop = time1.toLocalTime();
                         interval = resultset.getInt(5);
                         gracePeriod = resultset.getInt(6);
                         dock = resultset.getInt(7);
-                        lunchStart = resultset.
-                        lunchStop = resultset.
+                        Time time2 = resultset.getTime(8);
+                        lunchStart = time2.toLocalTime();
+                        Time time3 = resultset.getTime(9);
+                        lunchStop = time3.toLocalTime();
                         lunchDeduct = resultset.getInt(10);
                     }
                 }
