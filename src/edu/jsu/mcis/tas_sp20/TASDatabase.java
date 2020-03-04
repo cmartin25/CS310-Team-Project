@@ -61,7 +61,7 @@ public class TASDatabase {
 
    public Punch getPunch(int punch)
    {
-       Punch p = null;
+      
        int id = 0;
        int terminalid = 0;
        int punchTypeid = 0;
@@ -139,14 +139,13 @@ public class TASDatabase {
             } catch (Exception e) {} }
             
         }
-       p = new Punch(id, terminalid, badgeid, originalTimeStamp, punchTypeid);
+       Punch p = new Punch();
        
        return p;
     }
    
     public Badge getBadge(String badge)
     {
-        Badge b = null;
         String id = null;
         String description = null;
         
@@ -218,14 +217,13 @@ public class TASDatabase {
             } catch (Exception e) {} }
             
         }
-        b = new Badge(id, description);
+        Badge b = new Badge(id, description);
         
         return b;
     }
     
     public Shift getShift(int shift)
     {
-        Shift s = null;
         String description = null;
         LocalTime start = null;
         LocalTime stop = null;
@@ -315,7 +313,7 @@ public class TASDatabase {
             } catch (Exception e) {} }
             
         }
-        s = new Shift(shift, description, start, stop, interval,
+        Shift s = new Shift(shift, description, start, stop, interval,
             gracePeriod, dock, lunchStart, lunchStop, lunchDeduct);
         
         return s;
