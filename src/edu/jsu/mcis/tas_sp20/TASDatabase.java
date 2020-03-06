@@ -61,12 +61,11 @@ public class TASDatabase {
 
    public Punch getPunch(int punch)
    {
-      
        int id = 0;
        int terminalid = 0;
        int punchTypeid = 0;
        String badgeid = null;
-       Timestamp originalTimeStamp = null;
+       long originalTimeStamp = 0;
        
        try
        {
@@ -104,7 +103,7 @@ public class TASDatabase {
                         id = resultset.getInt(1);
                         terminalid = resultset.getInt(2);
                         badgeid = resultset.getString(3);
-                        originalTimeStamp = resultset.getTimestamp(4);
+                        originalTimeStamp = resultset.getTimestamp(4).getTime();
                         punchTypeid = resultset.getInt(5);
                     }
                 }
@@ -142,7 +141,7 @@ public class TASDatabase {
         }
        Badge badge = getBadge(badgeid);
        
-       Punch p = new Punch(terminalid, badge, originalTimeStamp.getTime(), punchTypeid);
+       Punch p = new Punch(terminalid, badge, originalTimeStamp, punchTypeid);
        
        return p;
     }
