@@ -72,9 +72,10 @@ public class TASDatabase {
        {
            /* Prepare Select Query */
                 
-            query = "SELECT * FROM tas.punch WHERE id = " + punch;
+            query = "SELECT * FROM punch = ?";
             
             pstSelect = conn.prepareStatement(query);
+            pstSelect.setInt(1, punch);
                 
             /* Execute Select Query */
                 
@@ -139,7 +140,9 @@ public class TASDatabase {
             } catch (Exception e) {} }
             
         }
-       Punch p = new Punch();
+       Badge badge = getBadge(badgeid);
+       
+       Punch p = new Punch(terminalid, badge, originalTimeStamp.getTime(), punchTypeid);
        
        return p;
     }
@@ -153,9 +156,10 @@ public class TASDatabase {
        {
            /* Prepare Select Query */
                 
-            query = "SELECT * FROM badge WHERE id = " + badge;
+            query = "SELECT * FROM badge = ?";
             
             pstSelect = conn.prepareStatement(query);
+            pstSelect.setString(1, badge);
                 
             /* Execute Select Query */
                 
@@ -234,6 +238,8 @@ public class TASDatabase {
         LocalTime lunchStop = null;
         int lunchDeduct = 0;
         
+        Shift s = null;
+        
         try
        {
            /* Prepare Select Query */
@@ -241,6 +247,7 @@ public class TASDatabase {
             query = "SELECT * FROM shift WHERE id = " + shift;
             
             pstSelect = conn.prepareStatement(query);
+            //pstSelect.setInt(1, shift);
                 
             /* Execute Select Query */
                 
@@ -263,23 +270,29 @@ public class TASDatabase {
                     /* Get ResultSet */
                         
                     resultset = pstSelect.getResultSet();
+                  
+                    description = resultset.getString("description");
+                    String startTime = resultset.getString("start");
+                    String[] startArray = startTime.split(":");
+                    start = LocalTime.of( Integer.parseInt(startArray[0]), 
+                            Integer.getInteger(startArray[1]));
+                    String stopTime = resultset.getString("stop");
+                    String[] stopArray = stopTime.split(":");
+                    stop = LocalTime.of(Integer.parseInt(stopArray[0]), 
+                            Integer.getInteger(stopArray[1]));
+                    interval = resultset.getInt("interval");
+                    gracePeriod = resultset.getInt("graceperiod");
+                    dock = resultset.getInt("dock");
+                    String lunchstartTime = resultset.getString("lunchstart");
+                    String[] lunchstartArray = lunchstartTime.split(":");
+                    lunchStart = LocalTime.of(Integer.parseInt(lunchstartArray[0]), 
+                            Integer.getInteger(lunchstartArray[1]));
+                    String lunchstopTime = resultset.getString("lunchstop");
+                    String[] lunchstopArray = lunchstopTime.split(":");
+                    lunchStop = LocalTime.of(Integer.parseInt(lunchstopArray[0]), 
+                            Integer.getInteger(lunchstopArray[1]));
+                    lunchDeduct = resultset.getInt("lunchdeduct");
                     
-                    while(resultset.next()) 
-                    {
-                        description = resultset.getString(2);
-                        Time time = resultset.getTime(3);
-                        start = time.toLocalTime();
-                        Time time1 = resultset.getTime(4);
-                        stop = time1.toLocalTime();
-                        interval = resultset.getInt(5);
-                        gracePeriod = resultset.getInt(6);
-                        dock = resultset.getInt(7);
-                        Time time2 = resultset.getTime(8);
-                        lunchStart = time2.toLocalTime();
-                        Time time3 = resultset.getTime(9);
-                        lunchStop = time3.toLocalTime();
-                        lunchDeduct = resultset.getInt(10);
-                    }
                 }
                 else 
                 {
@@ -313,13 +326,89 @@ public class TASDatabase {
             } catch (Exception e) {} }
             
         }
-        Shift s = new Shift(shift, description, start, stop, interval,
+        
+        s = new Shift(shift, description, start, stop, interval,
             gracePeriod, dock, lunchStart, lunchStop, lunchDeduct);
         
         return s;
         
         
     }
+    
+    public Shift getShift(Badge badge){
+        
+        Shift shift = null;
+        String badgeid = badge.getBadgeID();
+        
+        try{
+        
+            /* Prepare Select Query */
+                
+            query = "SELECT * FROM employee WHERE badgeid = ?";
+            
+            pstSelect = conn.prepareStatement(query);
+            pstSelect.setString(1, badgeid);
+            
+                
+            /* Execute Select Query */
+                
+            System.out.println("Submitting Query ...");
+                
+            hasResults = pstSelect.execute();                
+            resultset = pstSelect.getResultSet();
+            metadata = resultset.getMetaData();
+            columnCount = metadata.getColumnCount(); 
+            
+            /* Get Results */
+            
+            System.out.println("Getting Results ...");
+                
+            while ( hasResults || pstSelect.getUpdateCount() != -1 ) 
+            {
+                if ( hasResults ) 
+                {
+   
+                    /* Get ResultSet */
+                        
+                        resultset = pstSelect.getResultSet();
+                    
+                        shift = getShift(resultset.getInt("shiftid"));
+                             
+                }
+                else
+                {
+                    resultCount = pstSelect.getUpdateCount();  
+                    if ( resultCount == -1 ) 
+                    {
+                        break;
+                    }    
+                }
+                
+                /* Check for More Data */
+                hasResults = pstSelect.getMoreResults();
+            }
+        }
+        catch (Exception e) {
+            System.err.println(e.toString());
+            
+        }
+        
+        /* Close Other Database Objects */
+        
+        finally {
+            
+            if (resultset != null) { try { resultset.close(); resultset = null; 
+            } catch (Exception e) {} }
+            
+            if (pstSelect != null) { try { pstSelect.close(); pstSelect = null; 
+            } catch (Exception e) {} }
+            
+            if (pstUpdate != null) { try { pstUpdate.close(); pstUpdate = null; 
+            } catch (Exception e) {} }
+            
+        }
+        
+        return shift;
+        
+    }
 }
-
-

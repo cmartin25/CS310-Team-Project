@@ -7,7 +7,7 @@ import java.util.Date;
 public class Punch {
     int id, terminalid, punchtypeid;
     Badge badge;
-    Long originaltimestamp;
+    long originaltimestamp;
     String adjustmenttype;
     
     Punch(Badge badge, int terminalid, int punchtypeid){
@@ -19,7 +19,7 @@ public class Punch {
         this.originaltimestamp = System.currentTimeMillis();
     }
     
-    Punch(int terminalid, Badge badge, Long timestamp, int punchtypeid){
+    Punch(int terminalid, Badge badge, long timestamp, int punchtypeid){
         id = 0;   
         adjustmenttype = null;
         this.terminalid = terminalid;
