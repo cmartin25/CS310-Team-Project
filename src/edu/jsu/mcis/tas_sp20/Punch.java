@@ -5,26 +5,26 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Punch {
-    int id, terminalid, punchtypeid;
+    int terminalid, id, punchtypeid;
     Badge badge;
-    long originaltimestamp;
     String adjustmenttype;
+    Long originaltimestamp;
     
     Punch(Badge badge, int terminalid, int punchtypeid){
         id = 0;   
-        adjustmenttype = null;
         this.terminalid = terminalid;
         this.badge = badge;
         this.punchtypeid = punchtypeid;
+        adjustmenttype = null;
         this.originaltimestamp = System.currentTimeMillis();
     }
     
-    Punch(int terminalid, Badge badge, long timestamp, int punchtypeid){
+    Punch(int terminalid, Badge badge, Long timestamp, int punchtypeid){
         id = 0;   
-        adjustmenttype = null;
         this.terminalid = terminalid;
         this.badge = badge;
         this.punchtypeid = punchtypeid;
+        adjustmenttype = null;
         this.originaltimestamp = timestamp;
     }
     
@@ -32,6 +32,10 @@ public class Punch {
         this.badge = badge;
     }
     
+    public void setPunchTypeID(int punchtypeid){
+        this.punchtypeid = punchtypeid;
+    }
+        
     public void setID(int id){
         this.id = id;
     }
@@ -40,16 +44,12 @@ public class Punch {
         this.terminalid = terminalid;
     }
     
-    public void setPunchTypeID(int punchtypeid){
-        this.punchtypeid = punchtypeid;
+    public void setAdjustmentType(String adjustmenttype){
+        this.adjustmenttype = adjustmenttype;
     }
     
     public void setOriginalTimeStamp(Long originaltimestamp){
         this.originaltimestamp = originaltimestamp;
-    }
-    
-    public void setAdjustmentType(String adjustmenttype){
-        this.adjustmenttype = adjustmenttype;
     }
     
     public Badge getBadge(){
@@ -60,16 +60,16 @@ public class Punch {
         return this.id;
     }
     
-    public int getTerminalID(){
-        return this.terminalid;
-    }
-    
     public int getPunchTypeID(){
         return this.punchtypeid;
     }
     
     public Long getOriginalTimeStamp(){
         return this.originaltimestamp;
+    }
+    
+    public int getTerminalID(){
+        return this.terminalid;
     }
     
     public String getAdjustmentType(){
@@ -81,13 +81,13 @@ public class Punch {
         
         switch (this.getPunchTypeID()){
             case 0:
-                s += " CLOCKED OUT: ";
+                s += " clocked out: ";
                 break;
             case 1:
-                s += " CLOCKED IN: ";
+                s += " clocked in: ";
                 break;
             case 2:
-                s += " TIMED OUT: ";
+                s += " timed out: ";
         }
         
         DateFormat df = new SimpleDateFormat("EEE MM/dd/yyyy HH:mm:ss");
