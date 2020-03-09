@@ -19,32 +19,23 @@ public class TASDatabase {
     boolean hasResults;
     int resultCount, columnCount, updateCount = 0;
     
-    public TASDatabase()
-            {
-            try
-                {
-                    System.out.println("Connecting to " + server + "...");
-
-                    /* Load the MySQL JDBC Driver */
-                    Class.forName("com.mysql.jdbc.Driver").newInstance();
-
-                    /* Open Connection */
-                    conn = DriverManager.getConnection(server, username, password);
-
-                    /* Test Connection */
-                    if (conn.isValid(0)) {
-
-                    /* Connection Open! */
-                    System.out.println("Connected Successfully!");
-        
-            }
-                
-                
-         }
-             catch (Exception e) {
+    public TASDatabase() {
+        try {
             
-            System.err.println(e.toString());
+            System.out.println("Connecting to " + server + "...");
+
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+
+            conn = DriverManager.getConnection(server, username, password);
+
+            if (conn.isValid(0)) {
+
+            System.out.println("Connected Successfully!");
             
+            }                   
+        }
+        catch (Exception e) {
+        System.err.println(e.toString());    
         }
     }
     
@@ -70,23 +61,18 @@ public class TASDatabase {
        
        try
        {
-           /* Prepare Select Query */
                 
             query = "SELECT * FROM punch = ?";
             
             pstSelect = conn.prepareStatement(query);
             pstSelect.setInt(1, punch);
                 
-            /* Execute Select Query */
-                
             System.out.println("Submitting Query ...");
                 
             hasResults = pstSelect.execute();                
             resultset = pstSelect.getResultSet();
             metadata = resultset.getMetaData();
-            columnCount = metadata.getColumnCount(); 
-            
-            /* Get Results */
+            columnCount = metadata.getColumnCount();
                 
             System.out.println("Getting Results ...");
                 
@@ -94,8 +80,6 @@ public class TASDatabase {
             {
                 if ( hasResults ) 
                 {
-                        
-                    /* Get ResultSet */
                         
                     resultset = pstSelect.getResultSet();
                     
@@ -116,8 +100,7 @@ public class TASDatabase {
                         break;
                     }    
                 }
-                   
-                /* Check for More Data */
+
                 hasResults = pstSelect.getMoreResults();
 
             }
@@ -125,9 +108,7 @@ public class TASDatabase {
         catch (Exception e) {
             System.err.println(e.toString());   
         }
-        
-        /* Close Other Database Objects */
-        
+
         finally {
             
             if (resultset != null) { try { resultset.close(); resultset = null; 
@@ -153,15 +134,11 @@ public class TASDatabase {
         String description = null;
         
         try
-       {
-           /* Prepare Select Query */
-                
+       {        
             query = "SELECT * FROM badge = ?";
             
             pstSelect = conn.prepareStatement(query);
             pstSelect.setString(1, badge);
-                
-            /* Execute Select Query */
                 
             System.out.println("Submitting Query ...");
                 
@@ -169,18 +146,13 @@ public class TASDatabase {
             resultset = pstSelect.getResultSet();
             metadata = resultset.getMetaData();
             columnCount = metadata.getColumnCount(); 
-            
-            /* Get Results */
                 
             System.out.println("Getting Results ...");
                 
             while ( hasResults || pstSelect.getUpdateCount() != -1 ) 
             {
                 if ( hasResults ) 
-                {
-                        
-                    /* Get ResultSet */
-                        
+                {       
                     resultset = pstSelect.getResultSet();
                     
                     while(resultset.next()) 
@@ -197,8 +169,7 @@ public class TASDatabase {
                         break;
                     }    
                 }
-                   
-                /* Check for More Data */
+ 
                 hasResults = pstSelect.getMoreResults();
 
             }
@@ -206,9 +177,7 @@ public class TASDatabase {
         catch (Exception e) {
             System.err.println(e.toString());   
         }
-        
-        /* Close Other Database Objects */
-        
+
         finally {
             
             if (resultset != null) { try { resultset.close(); resultset = null; 
@@ -241,15 +210,11 @@ public class TASDatabase {
         Shift s = null;
         
         try
-       {
-           /* Prepare Select Query */
-                
+       {                
             query = "SELECT * FROM shift WHERE id = " + shift;
             
             pstSelect = conn.prepareStatement(query);
             //pstSelect.setInt(1, shift);
-                
-            /* Execute Select Query */
                 
             System.out.println("Submitting Query ...");
                 
@@ -257,8 +222,6 @@ public class TASDatabase {
             resultset = pstSelect.getResultSet();
             metadata = resultset.getMetaData();
             columnCount = metadata.getColumnCount(); 
-            
-            /* Get Results */
                 
             System.out.println("Getting Results ...");
                 
@@ -266,33 +229,33 @@ public class TASDatabase {
             {
                 if ( hasResults ) 
                 {
-                        
-                    /* Get ResultSet */
-                        
                     resultset = pstSelect.getResultSet();
                   
                     description = resultset.getString("description");
                     String startTime = resultset.getString("start");
-                    String[] startArray = startTime.split(":");
-                    start = LocalTime.of( Integer.parseInt(startArray[0]), 
-                            Integer.getInteger(startArray[1]));
                     String stopTime = resultset.getString("stop");
-                    String[] stopArray = stopTime.split(":");
-                    stop = LocalTime.of(Integer.parseInt(stopArray[0]), 
-                            Integer.getInteger(stopArray[1]));
                     interval = resultset.getInt("interval");
                     gracePeriod = resultset.getInt("graceperiod");
                     dock = resultset.getInt("dock");
                     String lunchstartTime = resultset.getString("lunchstart");
+                    String lunchstopTime = resultset.getString("lunchstop");
+                    lunchDeduct = resultset.getInt("lunchdeduct");
+                    
+                    String[] startArray = startTime.split(":");
+                    start = LocalTime.of( Integer.parseInt(startArray[0]), 
+                            Integer.getInteger(startArray[1]));
+                   
+                    String[] stopArray = stopTime.split(":");
+                    stop = LocalTime.of(Integer.parseInt(stopArray[0]), 
+                            Integer.getInteger(stopArray[1]));
+                    
                     String[] lunchstartArray = lunchstartTime.split(":");
                     lunchStart = LocalTime.of(Integer.parseInt(lunchstartArray[0]), 
                             Integer.getInteger(lunchstartArray[1]));
-                    String lunchstopTime = resultset.getString("lunchstop");
+                    
                     String[] lunchstopArray = lunchstopTime.split(":");
                     lunchStop = LocalTime.of(Integer.parseInt(lunchstopArray[0]), 
-                            Integer.getInteger(lunchstopArray[1]));
-                    lunchDeduct = resultset.getInt("lunchdeduct");
-                    
+                            Integer.getInteger(lunchstopArray[1]));   
                 }
                 else 
                 {
@@ -303,7 +266,6 @@ public class TASDatabase {
                     }    
                 }
                    
-                /* Check for More Data */
                 hasResults = pstSelect.getMoreResults();
 
             }
@@ -311,8 +273,6 @@ public class TASDatabase {
         catch (Exception e) {
             System.err.println(e.toString());   
         }
-        
-        /* Close Other Database Objects */
         
         finally {
             
@@ -331,8 +291,6 @@ public class TASDatabase {
             gracePeriod, dock, lunchStart, lunchStop, lunchDeduct);
         
         return s;
-        
-        
     }
     
     public Shift getShift(Badge badge){
@@ -341,16 +299,11 @@ public class TASDatabase {
         String badgeid = badge.getBadgeID();
         
         try{
-        
-            /* Prepare Select Query */
-                
+            
             query = "SELECT * FROM employee WHERE badgeid = ?";
             
             pstSelect = conn.prepareStatement(query);
             pstSelect.setString(1, badgeid);
-            
-                
-            /* Execute Select Query */
                 
             System.out.println("Submitting Query ...");
                 
@@ -359,21 +312,14 @@ public class TASDatabase {
             metadata = resultset.getMetaData();
             columnCount = metadata.getColumnCount(); 
             
-            /* Get Results */
-            
             System.out.println("Getting Results ...");
                 
             while ( hasResults || pstSelect.getUpdateCount() != -1 ) 
             {
                 if ( hasResults ) 
-                {
-   
-                    /* Get ResultSet */
-                        
-                        resultset = pstSelect.getResultSet();
-                    
+                {       
+                        resultset = pstSelect.getResultSet();   
                         shift = getShift(resultset.getInt("shiftid"));
-                             
                 }
                 else
                 {
@@ -383,20 +329,15 @@ public class TASDatabase {
                         break;
                     }    
                 }
-                
-                /* Check for More Data */
                 hasResults = pstSelect.getMoreResults();
             }
         }
+        
         catch (Exception e) {
             System.err.println(e.toString());
-            
         }
         
-        /* Close Other Database Objects */
-        
         finally {
-            
             if (resultset != null) { try { resultset.close(); resultset = null; 
             } catch (Exception e) {} }
             
@@ -404,8 +345,7 @@ public class TASDatabase {
             } catch (Exception e) {} }
             
             if (pstUpdate != null) { try { pstUpdate.close(); pstUpdate = null; 
-            } catch (Exception e) {} }
-            
+            } catch (Exception e) {} }    
         }
         
         return shift;
