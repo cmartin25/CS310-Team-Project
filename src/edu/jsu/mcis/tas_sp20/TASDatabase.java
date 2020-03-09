@@ -2,6 +2,7 @@ package edu.jsu.mcis.tas_sp20;
 
 import java.sql.*;
 import java.time.LocalTime;
+import java.util.ArrayList;
 
 public class TASDatabase {
     
@@ -408,6 +409,28 @@ public class TASDatabase {
         }
         
         return shift;
-        
     }
+       
+    /* STARTED FEATURE 2 */
+    
+    public int insertPunch(Punch p) {
+        GregorianCalendar ots = new GregorianCalendar();
+        ots.setTimeInMillis(p.getOriginaltimestamp());
+        String badgeID = p.getBadge().getID();
+        int terminalID = p.getTerminalid(), punchTypeID = p.getPunchtypeid();
+    }
+    
+    public ArrayList<Punch> getDailyPunchList(Badge badge, long ts){
+        Timestamp timestamp = new Timestamp(ts);
+        String timeLike = timestamp.toString().substring(0, 11);
+        timeLike += "%";
+        ArrayList<Punch> dailyPunchList = new ArrayList<>();
+        
+        Timestamp nextDay = new Timestamp(ts + 86400000);
+        String timeLikeNext = nextDay.toString().substring(0, 11);
+        timeLikeNext += "%";
+    }
+    
+    /* ENDED FEATURE 2 */
+    
 }
