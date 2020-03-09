@@ -411,7 +411,7 @@ public class TASDatabase {
         return shift;
     }
        
-    /* STARTED FEATURE 2 */
+    /* STARTED FEATURE 2
     
     public int insertPunch(Punch p) {
         GregorianCalendar ots = new GregorianCalendar();
@@ -431,6 +431,6 @@ public class TASDatabase {
         timeLikeNext += "%";
     }
     
-    /* ENDED FEATURE 2 */
+        ENDED FEATURE 2 */
     
 }
