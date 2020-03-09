@@ -77,23 +77,26 @@ public class Punch {
     }
     
     public String printOriginalTimestamp(){
-        String s = "";
+        String s = "#";
+        String badgeid = this.badge.getBadgeID();
+        s += badgeid;
         
         switch (this.getPunchTypeID()){
             case 0:
-                s += " clocked out: ";
+                s += " CLOCKED OUT: ";
                 break;
             case 1:
-                s += " clocked in: ";
+                s += " CLOCKED IN: ";
                 break;
             case 2:
-                s += " timed out: ";
+                s += " TIMED OUT: ";
         }
         
         DateFormat df = new SimpleDateFormat("EEE MM/dd/yyyy HH:mm:ss");
         Date d = new Date(this.originaltimestamp);
         
         s += (df.format(d)).toUpperCase();
+        
         
         return s;
     }

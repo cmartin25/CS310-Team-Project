@@ -11,13 +11,21 @@ public class TASDatabase {
     ResultSet resultset = null;
     ResultSetMetaData metadata = null; 
     
-    String server = ("jdbc:mysql://localhost/tas");
+    String server = ("jdbc:mysql://localhost/TAS");
     String username = "Group1";
     String password = "Group1";
     
     String query, key, value;
     boolean hasResults;
     int resultCount, columnCount, updateCount = 0;
+    
+    public static void main (String[] args){
+        TASDatabase db = new TASDatabase();
+        db.getBadge("12565C60");
+        System.out.println(db.getShift(1).toString());
+        
+        
+    }
     
     public TASDatabase() {
         try {
@@ -62,7 +70,7 @@ public class TASDatabase {
        try
        {
                 
-            query = "SELECT * FROM punch = ?";
+            query = "SELECT * FROM punch WHERE id = ?";
             
             pstSelect = conn.prepareStatement(query);
             pstSelect.setInt(1, punch);
@@ -85,11 +93,11 @@ public class TASDatabase {
                     
                     while(resultset.next()) 
                     {
-                        id = resultset.getInt(1);
-                        terminalid = resultset.getInt(2);
-                        badgeid = resultset.getString(3);
-                        originalTimeStamp = resultset.getTimestamp(4).getTime();
-                        punchTypeid = resultset.getInt(5);
+                        id = resultset.getInt("id");
+                        terminalid = resultset.getInt("terminalid");
+                        badgeid = resultset.getString("badgeid");
+                        originalTimeStamp = resultset.getTimestamp("originaltimestamp").getTime();
+                        punchTypeid = resultset.getInt("punchtypeid");
                     }
                 }
                 else 
@@ -121,7 +129,7 @@ public class TASDatabase {
             } catch (Exception e) {} }
             
         }
-       Badge badge = getBadge(badgeid);
+       Badge badge = this.getBadge(badgeid);
        
        Punch p = new Punch(terminalid, badge, originalTimeStamp, punchTypeid);
        
@@ -135,7 +143,7 @@ public class TASDatabase {
         
         try
        {        
-            query = "SELECT * FROM badge = ?";
+            query = "SELECT * FROM badge WHERE id = ?";
             
             pstSelect = conn.prepareStatement(query);
             pstSelect.setString(1, badge);
@@ -211,10 +219,10 @@ public class TASDatabase {
         
         try
        {                
-            query = "SELECT * FROM shift WHERE id = " + shift;
+            query = "SELECT * FROM shift WHERE id = ?";
             
             pstSelect = conn.prepareStatement(query);
-            //pstSelect.setInt(1, shift);
+            pstSelect.setInt(1, shift);
                 
             System.out.println("Submitting Query ...");
                 
@@ -229,7 +237,9 @@ public class TASDatabase {
             {
                 if ( hasResults ) 
                 {
+                    
                     resultset = pstSelect.getResultSet();
+                    resultset.first();
                   
                     description = resultset.getString("description");
                     String startTime = resultset.getString("start");
@@ -241,21 +251,23 @@ public class TASDatabase {
                     String lunchstopTime = resultset.getString("lunchstop");
                     lunchDeduct = resultset.getInt("lunchdeduct");
                     
+                    
+                    
                     String[] startArray = startTime.split(":");
                     start = LocalTime.of( Integer.parseInt(startArray[0]), 
-                            Integer.getInteger(startArray[1]));
-                   
+                            Integer.parseInt(startArray[1]));
+             
                     String[] stopArray = stopTime.split(":");
                     stop = LocalTime.of(Integer.parseInt(stopArray[0]), 
-                            Integer.getInteger(stopArray[1]));
+                            Integer.parseInt(stopArray[1]));
                     
                     String[] lunchstartArray = lunchstartTime.split(":");
                     lunchStart = LocalTime.of(Integer.parseInt(lunchstartArray[0]), 
-                            Integer.getInteger(lunchstartArray[1]));
+                            Integer.parseInt(lunchstartArray[1]));
                     
                     String[] lunchstopArray = lunchstopTime.split(":");
                     lunchStop = LocalTime.of(Integer.parseInt(lunchstopArray[0]), 
-                            Integer.getInteger(lunchstopArray[1]));   
+                            Integer.parseInt(lunchstopArray[1]));   
                 }
                 else 
                 {
@@ -300,7 +312,7 @@ public class TASDatabase {
         
         try{
             
-            query = "SELECT * FROM employee WHERE badgeid = ?";
+            query = "SELECT shiftid FROM employee WHERE badgeid = ?";
             
             pstSelect = conn.prepareStatement(query);
             pstSelect.setString(1, badgeid);
@@ -318,7 +330,8 @@ public class TASDatabase {
             {
                 if ( hasResults ) 
                 {       
-                        resultset = pstSelect.getResultSet();   
+                        resultset = pstSelect.getResultSet();
+                        resultset.first();
                         shift = getShift(resultset.getInt("shiftid"));
                 }
                 else

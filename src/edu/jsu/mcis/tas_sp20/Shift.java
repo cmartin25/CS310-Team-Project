@@ -2,6 +2,7 @@ package edu.jsu.mcis.tas_sp20;
 
 import java.util.*;
 import java.time.LocalTime;
+import static java.time.temporal.ChronoUnit.MINUTES;
 
 public class Shift {
     private int id;
@@ -111,4 +112,21 @@ public class Shift {
             this.lunchdeduct = lunchdeduct;
     }
 
+    @Override
+    public String toString(){
+        
+        
+        
+        long startMinutes = start.until(stop, MINUTES);
+        long startLunchMinutes = lunchstart.until(lunchstop, MINUTES);
+        
+        String shift = description + ": " + start + " - " + stop + " (" 
+        + startMinutes + " minutes); Lunch: " + 
+        lunchstart + " - " + lunchstop + " (" 
+        + startLunchMinutes + " minutes)";
+        
+        return shift;
+        
+    }
+    
 }
