@@ -3,6 +3,9 @@ package edu.jsu.mcis.tas_sp20;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.sql.Timestamp;
+import java.time.*;
+import java.util.GregorianCalendar;
 
 public class Punch {
     int terminalid, id, punchtypeid;
@@ -101,4 +104,16 @@ public class Punch {
         return s;
     }
     
+    public void adjust(Shift s) {
+       
+        
+    }
+    
+    public String printAdjustedTimestamp() {
+        String s = "";
+        s = "Badge #: " + this.getBadge();
+        return s;
+    }
+    
 }
+    
