@@ -3,6 +3,7 @@ package edu.jsu.mcis.tas_sp20;
 import java.sql.*;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 
 public class TASDatabase {
     
@@ -364,15 +365,69 @@ public class TASDatabase {
         return shift;
     }
        
-    /* STARTED FEATURE 2
+    /* STARTED FEATURE 2 */
     
     public int insertPunch(Punch p) {
         GregorianCalendar ots = new GregorianCalendar();
-        ots.setTimeInMillis(p.getOriginaltimestamp());
-        String badgeID = p.getBadge().getID();
-        int terminalID = p.getTerminalid(), punchTypeID = p.getPunchtypeid();
+        ots.setTimeInMillis(p.getOriginalTimeStamp());
+        String badgeID = p.getBadge().getBadgeID();
+        int terminalID = p.getTerminalID(), punchTypeID = p.getPunchTypeID();
+        
+        try {
+            
+            query = "INSERT INTO punch (terminalid, badgeid, originaltimestamp,"
+                    + "punchtypeid)";
+            
+            pstSelect = conn.prepareStatement(query);
+            pstSelect.setString(1, badgeID);
+                
+            System.out.println("Submitting Query ...");
+                
+            hasResults = pstSelect.execute();                
+            resultset = pstSelect.getResultSet();
+            metadata = resultset.getMetaData();
+            columnCount = metadata.getColumnCount(); 
+            
+            System.out.println("Getting Results ...");
+                
+            while ( hasResults || pstSelect.getUpdateCount() != -1 ) 
+            {
+                if ( hasResults ) 
+                {       
+                        resultset = pstSelect.getResultSet();
+                        resultset.next();
+                        SOMETHING = ;
+                }
+                else
+                {
+                    resultCount = pstSelect.getUpdateCount();  
+                    if ( resultCount == -1 ) 
+                    {
+                        break;
+                    }    
+                }
+                hasResults = pstSelect.getMoreResults();
+            }
+        }
+        
+        catch (Exception e) {
+            System.err.println(e.toString());
+        }
+        
+        finally {
+            if (resultset != null) { try { resultset.close(); resultset = null; 
+            } catch (Exception e) {} }
+            
+            if (pstSelect != null) { try { pstSelect.close(); pstSelect = null; 
+            } catch (Exception e) {} }
+            
+            if (pstUpdate != null) { try { pstUpdate.close(); pstUpdate = null; 
+            } catch (Exception e) {} }    
+        }
+        
+        return SOMETHING;
     }
-    
+         
     public ArrayList<Punch> getDailyPunchList(Badge badge, long ts){
         Timestamp timestamp = new Timestamp(ts);
         String timeLike = timestamp.toString().substring(0, 11);
@@ -382,8 +437,59 @@ public class TASDatabase {
         Timestamp nextDay = new Timestamp(ts + 86400000);
         String timeLikeNext = nextDay.toString().substring(0, 11);
         timeLikeNext += "%";
+    
+    try {
+            
+            query = "INSERT INTO punch (terminalid, badgeid, originaltimestamp,"
+                    + "punchtypeid)";
+            
+            pstSelect = conn.prepareStatement(query);
+                
+            System.out.println("Submitting Query ...");
+                
+            hasResults = pstSelect.execute();                
+            resultset = pstSelect.getResultSet();
+            metadata = resultset.getMetaData();
+            columnCount = metadata.getColumnCount(); 
+            
+            System.out.println("Getting Results ...");
+                
+            while ( hasResults || pstSelect.getUpdateCount() != -1 ) 
+            {
+                if ( hasResults ) 
+                {       
+                        resultset = pstSelect.getResultSet();
+                        resultset.next();
+                        SOMETHING = ;
+                }
+                else
+                {
+                    resultCount = pstSelect.getUpdateCount();  
+                    if ( resultCount == -1 ) 
+                    {
+                        break;
+                    }    
+                }
+                hasResults = pstSelect.getMoreResults();
+            }
+        }
+        
+        catch (Exception e) {
+            System.err.println(e.toString());
+        }
+        
+        finally {
+            if (resultset != null) { try { resultset.close(); resultset = null; 
+            } catch (Exception e) {} }
+            
+            if (pstSelect != null) { try { pstSelect.close(); pstSelect = null; 
+            } catch (Exception e) {} }
+            
+            if (pstUpdate != null) { try { pstUpdate.close(); pstUpdate = null; 
+            } catch (Exception e) {} }    
+        }
+        
+        return SOMETHING;
+       /* ENDED FEATURE 2 */
     }
-    
-        ENDED FEATURE 2 */
-    
 }
