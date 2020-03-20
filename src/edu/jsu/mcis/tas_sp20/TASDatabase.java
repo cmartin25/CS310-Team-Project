@@ -1,6 +1,7 @@
 package edu.jsu.mcis.tas_sp20;
 
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
@@ -368,18 +369,62 @@ public class TASDatabase {
     /* STARTED FEATURE 2 */
     
     public int insertPunch(Punch p) {
-        GregorianCalendar ots = new GregorianCalendar();
-        ots.setTimeInMillis(p.getOriginalTimeStamp());
+        
         String badgeID = p.getBadge().getBadgeID();
-        int terminalID = p.getTerminalID(), punchTypeID = p.getPunchTypeID();
+        int terminalID = p.getTerminalid();
+        int punchTypeID = p.getPunchtypeid();
+        int newPunchID = p.getID();
+        Long originalTimeStamp = p.getOriginaltimestamp();
+        Timestamp ts = new Timestamp(originalTimeStamp);
+        GregorianCalendar calendar = new GregorianCalendar();
+        calendar.setTimeInMillis(originalTimeStamp);
         
         try {
             
             query = "INSERT INTO punch (terminalid, badgeid, originaltimestamp,"
-                    + "punchtypeid)";
+                    + "punchtypeid) VALUES (?, ?, ?, ?)";
             
+            pstSelect = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            
+            pstSelect.setInt(1, p.getTerminalid());
+            pstSelect.setInt(4, p.getPunchtypeid());
+            pstSelect.setString(2, p.getBadgeid());
+            pstSelect.setString(3, (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"))
+                    .format(calendar.getTime()));
+                
+            System.out.println("Submitting Query ...");
+                
+            pstSelect.execute();                
+            resultset = pstSelect.getGeneratedKeys();
+           
+            System.out.println("Getting Results ...");
+            
+            resultset.first();
+            
+            return resultset.getInt(1);
+        }
+        
+        catch (Exception e) {
+            System.err.println(e.toString());
+        }
+        
+        finally {
+            if (resultset != null) { try { resultset.close(); resultset = null; 
+            } catch (Exception e) {} }
+            
+            if (pstSelect != null) { try { pstSelect.close(); pstSelect = null; 
+            } catch (Exception e) {} }
+            
+            if (pstUpdate != null) { try { pstUpdate.close(); pstUpdate = null; 
+            } catch (Exception e) {} }    
+        }
+        return -1;
+    }
+        
+         /* try {
+            
+            query = "SELECT id from punch ORDER by id DESCRIPTION";
             pstSelect = conn.prepareStatement(query);
-            pstSelect.setString(1, badgeID);
                 
             System.out.println("Submitting Query ...");
                 
@@ -396,7 +441,8 @@ public class TASDatabase {
                 {       
                         resultset = pstSelect.getResultSet();
                         resultset.next();
-                        SOMETHING = ;
+                        newPunchID = resultset.getInt(1);
+                        
                 }
                 else
                 {
@@ -425,24 +471,18 @@ public class TASDatabase {
             } catch (Exception e) {} }    
         }
         
-        return SOMETHING;
-    }
-         
+        return newPunchID;
+
+        }
+    
+    /*
     public ArrayList<Punch> getDailyPunchList(Badge badge, long ts){
-        Timestamp timestamp = new Timestamp(ts);
-        String timeLike = timestamp.toString().substring(0, 11);
-        timeLike += "%";
-        ArrayList<Punch> dailyPunchList = new ArrayList<>();
         
-        Timestamp nextDay = new Timestamp(ts + 86400000);
-        String timeLikeNext = nextDay.toString().substring(0, 11);
-        timeLikeNext += "%";
+        
     
     try {
             
-            query = "INSERT INTO punch (terminalid, badgeid, originaltimestamp,"
-                    + "punchtypeid)";
-            
+            query = ;
             pstSelect = conn.prepareStatement(query);
                 
             System.out.println("Submitting Query ...");
@@ -460,7 +500,7 @@ public class TASDatabase {
                 {       
                         resultset = pstSelect.getResultSet();
                         resultset.next();
-                        SOMETHING = ;
+                        
                 }
                 else
                 {
@@ -492,9 +532,4 @@ public class TASDatabase {
         return SOMETHING;
        /* ENDED FEATURE 2 */
     }
-    
-        ENDED FEATURE 2 */
-    
-    //test
-    
-}
+ 

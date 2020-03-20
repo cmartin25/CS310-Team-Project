@@ -63,15 +63,15 @@ public class Punch {
         return this.id;
     }
     
-    public int getPunchTypeID(){
+    public int getPunchtypeid(){
         return this.punchtypeid;
     }
     
-    public Long getOriginalTimeStamp(){
+    public Long getOriginaltimestamp(){
         return this.originaltimestamp;
     }
     
-    public int getTerminalID(){
+    public int getTerminalid(){
         return this.terminalid;
     }
     
@@ -79,7 +79,7 @@ public class Punch {
         return this.adjustmenttype;
     }
     
-    public String printOriginalTimestamp(){
+    public String printOriginaltimestamp(){
         String s = "#";
         String badgeid = this.badge.getBadgeID();
         s += badgeid;
@@ -113,6 +113,10 @@ public class Punch {
         String s = "";
         s = "Badge #: " + this.getBadge();
         return s;
+    }
+
+    String getBadgeid() {
+        return this.badge.getBadgeID();
     }
     
 }
