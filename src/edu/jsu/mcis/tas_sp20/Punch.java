@@ -30,6 +30,15 @@ public class Punch {
         adjustmenttype = null;
         this.originaltimestamp = timestamp;
     }
+
+    Punch(int id, int terminalid, Badge badge, long timestamp, int punchtypeid) {
+        this.id = id;   
+        this.terminalid = terminalid;
+        this.badge = badge;
+        this.punchtypeid = punchtypeid;
+        adjustmenttype = null;
+        this.originaltimestamp = timestamp;
+    }
     
     public void setBadge(Badge badge){
         this.badge = badge;
@@ -79,12 +88,12 @@ public class Punch {
         return this.adjustmenttype;
     }
     
-    public String printOriginaltimestamp(){
+    public String printOriginalTimestamp(){
         String s = "#";
         String badgeid = this.badge.getBadgeID();
         s += badgeid;
         
-        switch (this.getPunchTypeID()){
+        switch (this.getPunchtypeid()){
             case 0:
                 s += " CLOCKED OUT: ";
                 break;

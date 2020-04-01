@@ -421,101 +421,48 @@ public class TASDatabase {
         return -1;
     }
         
-         /* try {
-            
-            query = "SELECT id from punch ORDER by id DESCRIPTION";
-            pstSelect = conn.prepareStatement(query);
-                
-            System.out.println("Submitting Query ...");
-                
-            hasResults = pstSelect.execute();                
-            resultset = pstSelect.getResultSet();
-            metadata = resultset.getMetaData();
-            columnCount = metadata.getColumnCount(); 
-            
-            System.out.println("Getting Results ...");
-                
-            while ( hasResults || pstSelect.getUpdateCount() != -1 ) 
-            {
-                if ( hasResults ) 
-                {       
-                        resultset = pstSelect.getResultSet();
-                        resultset.next();
-                        newPunchID = resultset.getInt(1);
-                        
-                }
-                else
-                {
-                    resultCount = pstSelect.getUpdateCount();  
-                    if ( resultCount == -1 ) 
-                    {
-                        break;
-                    }    
-                }
-                hasResults = pstSelect.getMoreResults();
-            }
-        }
-        
-        catch (Exception e) {
-            System.err.println(e.toString());
-        }
-        
-        finally {
-            if (resultset != null) { try { resultset.close(); resultset = null; 
-            } catch (Exception e) {} }
-            
-            if (pstSelect != null) { try { pstSelect.close(); pstSelect = null; 
-            } catch (Exception e) {} }
-            
-            if (pstUpdate != null) { try { pstUpdate.close(); pstUpdate = null; 
-            } catch (Exception e) {} }    
-        }
-        
-        return newPunchID;
-
-        }
-    
-    /*
     public ArrayList<Punch> getDailyPunchList(Badge badge, long ts){
+        ArrayList<Punch> dailyPunchList = new ArrayList<>();
+        GregorianCalendar calendar = new GregorianCalendar();
+        calendar.setTimeInMillis(ts);
+        SimpleDateFormat formattedDate = new SimpleDateFormat("yyyy-MM-dd");
+        String date = formattedDate.format(calendar.getTime());
+        date += "%";
+        String badgeid = badge.getBadgeID();
         
-        
-    
     try {
             
-            query = ;
-            pstSelect = conn.prepareStatement(query);
+        query = "SELECT * FROM punch WHERE badgeid = ? AND originaltimestamp " 
+                + "LIKE ?";
+        
+        pstSelect = conn.prepareStatement(query);
+        
+        pstSelect.setString(1, badgeid);
+        pstSelect.setString(2, date);
+        
+        System.out.println("Submitting Query ...");
                 
-            System.out.println("Submitting Query ...");
-                
-            hasResults = pstSelect.execute();                
-            resultset = pstSelect.getResultSet();
-            metadata = resultset.getMetaData();
-            columnCount = metadata.getColumnCount(); 
+        hasResults = pstSelect.execute();                
+        resultset = pstSelect.getResultSet();
+        metadata = resultset.getMetaData();
+        columnCount = metadata.getColumnCount(); 
             
-            System.out.println("Getting Results ...");
-                
-            while ( hasResults || pstSelect.getUpdateCount() != -1 ) 
-            {
-                if ( hasResults ) 
-                {       
-                        resultset = pstSelect.getResultSet();
-                        resultset.next();
-                        
-                }
-                else
-                {
-                    resultCount = pstSelect.getUpdateCount();  
-                    if ( resultCount == -1 ) 
-                    {
-                        break;
-                    }    
-                }
-                hasResults = pstSelect.getMoreResults();
+        System.out.println("Getting Results ...");
+        
+        while (resultset.next()){
+           
+            long time = resultset.getTimestamp("originaltimestamp").getTime();
+            int punchtype = resultset.getInt("punchtypeid");
+            dailyPunchList.add(new Punch(
+            resultset.getInt("id")
+            ,resultset.getInt("terminalid")
+            ,badge ,time, punchtype));
             }
-        }
+        }   
         
         catch (Exception e) {
-            System.err.println(e.toString());
+            //System.err.println(e.toString());
+            e.printStackTrace();
         }
         
         finally {
@@ -528,8 +475,8 @@ public class TASDatabase {
             if (pstUpdate != null) { try { pstUpdate.close(); pstUpdate = null; 
             } catch (Exception e) {} }    
         }
-        
-        return SOMETHING;
-       /* ENDED FEATURE 2 */
+    
+        return dailyPunchList;
     }
  
+}
