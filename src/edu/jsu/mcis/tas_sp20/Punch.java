@@ -114,8 +114,34 @@ public class Punch {
     }
     
     public void adjust(Shift s) {
-       
         
+        long shiftInterval = s.getInterval() * 60000;
+        long shiftDock = s.getdock() * 60000;
+        long shiftGrace = s.getGracePeriod() * 60000;
+        
+       
+       //Creates orginal calendar and converts shfit times to GC and Long objects
+        GregorianCalendar orginialCalender = new GregorianCalendar();
+            orginialCalender.setTimeInMillis(this.getOriginaltimestamp());
+            orginialCalender.clear(GregorianCalendar.SECOND);
+        Long punchTime = orginialCalender.getTimeInMillis();
+        
+        //Pulls from orginial calendar
+        GregorianCalendar sStartCal = (GregorianCalendar) orginialCalender.clone();
+        sStartCal.set(GregorianCalendar.HOUR_OF_DAY, s.getStart().getHour());
+        sStartCal.set(GregorianCalendar.MINUTE, s.getStart().getMinute());
+        Long shiftStart = sStartCal.getTimeInMillis();
+        
+        GregorianCalendar sStopCal = (GregorianCalendar) orginialCalender.clone();
+        sStopCal.set(GregorianCalendar.HOUR_OF_DAY, s.getStop().getHour());
+        sStopCal.set(GregorianCalendar.MINUTE, s.getStop().getMinute());
+        Long shiftStop = sStopCal.getTimeInMillis();
+        
+        
+        //Checks is punch lands on a Saturday or Sunday 
+         if ((orginialCalender.get(GregorianCalendar.DAY_OF_WEEK) != GregorianCalendar.SATURDAY) && (orginialCalender.get(GregorianCalendar.DAY_OF_WEEK) != GregorianCalendar.SUNDAY)){
+             
+         }
     }
     
     public String printAdjustedTimestamp() {

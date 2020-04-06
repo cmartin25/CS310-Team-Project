@@ -21,7 +21,7 @@ public class Shift {
         LocalTime lunchstart, LocalTime lunchstop,
         int lunchdeduct) {
         this.id = id;
-        this.description=description;
+        this.description = description;
         this.start = start;
         this.stop = stop;
         this.interval = interval;
@@ -36,47 +36,47 @@ public class Shift {
             return this.id;
     }
 
-    public void setid(int id) {
+    public void setID(int id) {
             this.id = id;
     }
 
-    public String getdescription() {
+    public String getDescription() {
             return this.description;
     }
 
-    public void setdescription(String description) {
+    public void setDescription(String description) {
             this.description = description;
     }
 
-    public LocalTime getstart() {
+    public LocalTime getStart() {
             return this.start;
     }
 
-    public void setstart(LocalTime start) {
+    public void setStart(LocalTime start) {
             this.start = start;
     }
 
-    public LocalTime getstop() {
+    public LocalTime getStop() {
             return this.stop;
     }
 
-    public void setstop(LocalTime stop) {
+    public void setStop(LocalTime stop) {
             this.stop = stop;
     }
 
-    public int getgraceperiod() {
+    public int getGracePeriod() {
             return this.graceperiod;
     }
 
-    public void setgraceperiod(int graceperiod) {
+    public void setGracePeriod(int graceperiod) {
             this.start = start;
     }
 
-    public int getinterval() {
+    public int getInterval() {
             return this.interval;
     }
 
-    public void setinterval(int interval) {
+    public void setInterval(int interval) {
             this.interval = interval;
     }
 
@@ -88,34 +88,32 @@ public class Shift {
             this.dock = dock;
     }
 
-    public LocalTime getlunchstart() {
+    public LocalTime getLunchStart() {
             return this.lunchstart = lunchstart;
     }
 
-    public void setlunchstart(LocalTime lunchstart) {
+    public void setLunchStart(LocalTime lunchstart) {
             this.lunchstart = lunchstart;
     }
 
-    public LocalTime getlunchstop() {
+    public LocalTime getLunchStop() {
             return this.lunchstop;
     }
 
-    public void setlunchstop(LocalTime lunchstop) {
+    public void setLunchStop(LocalTime lunchstop) {
             this.lunchstop = lunchstop;
     }
 
-    public int getlunchdeduct() {
+    public int getLunchDeduct() {
             return this.lunchdeduct;
     }
 
-    public void setlunchdeduct(int lunchdeduct) {
+    public void setLunchDeduct(int lunchdeduct) {
             this.lunchdeduct = lunchdeduct;
     }
-
+    
     @Override
     public String toString(){
-        
-        
         
         long startMinutes = start.until(stop, MINUTES);
         long startLunchMinutes = lunchstart.until(lunchstop, MINUTES);
