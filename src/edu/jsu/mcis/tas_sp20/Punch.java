@@ -11,7 +11,7 @@ public class Punch {
     int terminalid, id, punchtypeid;
     Badge badge;
     String adjustmenttype;
-    Long originaltimestamp;
+    Long originaltimestamp, adjustedtimestamp;
     
     Punch(Badge badge, int terminalid, int punchtypeid){
         id = 0;   
@@ -40,6 +40,7 @@ public class Punch {
         this.originaltimestamp = timestamp;
     }
     
+    //Set Methods
     public void setBadge(Badge badge){
         this.badge = badge;
     }
@@ -64,6 +65,11 @@ public class Punch {
         this.originaltimestamp = originaltimestamp;
     }
     
+    public void setAdjustedTimestamp(Long adjustedtimestamp){
+        this.adjustedtimestamp = adjustedtimestamp;
+    }
+    
+    //Getter methods
     public Badge getBadge(){
         return this.badge;
     }
@@ -87,6 +93,46 @@ public class Punch {
     public String getAdjustmentType(){
         return this.adjustmenttype;
     }
+    
+    public Long getAdjustedTimestamp(){
+        return this.adjustedtimestamp;
+    }
+    
+     public String getBadgeID() {
+        return this.badge.getBadgeID();
+    }
+    
+     
+    public void adjust(Shift s) {
+        
+        long shiftInterval = s.getInterval() * 60000;
+        long shiftDock = s.getdock() * 60000;
+        long shiftGrace = s.getGracePeriod() * 60000;
+        
+       
+       //Creates orginal calendar and converts shfit times to GC and Long objects
+        GregorianCalendar orginialCalender = new GregorianCalendar();
+            orginialCalender.setTimeInMillis(this.getOriginaltimestamp());
+            orginialCalender.clear(GregorianCalendar.SECOND);
+        Long punchTime = orginialCalender.getTimeInMillis();
+        
+        //Pulls from orginial calendar
+        GregorianCalendar shiftCal = (GregorianCalendar) orginialCalender.clone();
+        shiftCal.set(GregorianCalendar.HOUR_OF_DAY, s.getStart().getHour());
+        shiftCal.set(GregorianCalendar.MINUTE, s.getStart().getMinute());
+        Long shiftStart = shiftCal.getTimeInMillis();
+        
+        GregorianCalendar sStopCal = (GregorianCalendar) orginialCalender.clone();
+        sStopCal.set(GregorianCalendar.HOUR_OF_DAY, s.getStop().getHour());
+        sStopCal.set(GregorianCalendar.MINUTE, s.getStop().getMinute());
+        Long shiftStop = sStopCal.getTimeInMillis();
+        
+        
+        //Checks is punch lands on a Saturday or Sunday 
+        if ((orginialCalender.get(GregorianCalendar.DAY_OF_WEEK) != GregorianCalendar.SATURDAY) && (orginialCalender.get(GregorianCalendar.DAY_OF_WEEK) != GregorianCalendar.SUNDAY)){
+            
+            }
+        }
     
     public String printOriginalTimestamp(){
         String s = "#";
@@ -113,45 +159,10 @@ public class Punch {
         return s;
     }
     
-    public void adjust(Shift s) {
-        
-        long shiftInterval = s.getInterval() * 60000;
-        long shiftDock = s.getdock() * 60000;
-        long shiftGrace = s.getGracePeriod() * 60000;
-        
-       
-       //Creates orginal calendar and converts shfit times to GC and Long objects
-        GregorianCalendar orginialCalender = new GregorianCalendar();
-            orginialCalender.setTimeInMillis(this.getOriginaltimestamp());
-            orginialCalender.clear(GregorianCalendar.SECOND);
-        Long punchTime = orginialCalender.getTimeInMillis();
-        
-        //Pulls from orginial calendar
-        GregorianCalendar sStartCal = (GregorianCalendar) orginialCalender.clone();
-        sStartCal.set(GregorianCalendar.HOUR_OF_DAY, s.getStart().getHour());
-        sStartCal.set(GregorianCalendar.MINUTE, s.getStart().getMinute());
-        Long shiftStart = sStartCal.getTimeInMillis();
-        
-        GregorianCalendar sStopCal = (GregorianCalendar) orginialCalender.clone();
-        sStopCal.set(GregorianCalendar.HOUR_OF_DAY, s.getStop().getHour());
-        sStopCal.set(GregorianCalendar.MINUTE, s.getStop().getMinute());
-        Long shiftStop = sStopCal.getTimeInMillis();
-        
-        
-        //Checks is punch lands on a Saturday or Sunday 
-         if ((orginialCalender.get(GregorianCalendar.DAY_OF_WEEK) != GregorianCalendar.SATURDAY) && (orginialCalender.get(GregorianCalendar.DAY_OF_WEEK) != GregorianCalendar.SUNDAY)){
-             
-         }
-    }
-    
     public String printAdjustedTimestamp() {
         String s = "";
         s = "Badge #: " + this.getBadge();
         return s;
-    }
-
-    String getBadgeid() {
-        return this.badge.getBadgeID();
     }
     
 }
