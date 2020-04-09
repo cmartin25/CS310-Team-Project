@@ -117,15 +117,27 @@ public class Punch {
         Long punchTime = orginialCalender.getTimeInMillis();
         
         //Pulls from orginial calendar
-        GregorianCalendar shiftCal = (GregorianCalendar) orginialCalender.clone();
-        shiftCal.set(GregorianCalendar.HOUR_OF_DAY, s.getStart().getHour());
-        shiftCal.set(GregorianCalendar.MINUTE, s.getStart().getMinute());
-        Long shiftStart = shiftCal.getTimeInMillis();
+        //Shifts
+        GregorianCalendar startGC = (GregorianCalendar) orginialCalender.clone();
+        startGC.set(GregorianCalendar.HOUR_OF_DAY, s.getStart().getHour());
+        startGC.set(GregorianCalendar.MINUTE, s.getStart().getMinute());
+        Long shiftStart = startGC.getTimeInMillis();
         
-        GregorianCalendar sStopCal = (GregorianCalendar) orginialCalender.clone();
-        sStopCal.set(GregorianCalendar.HOUR_OF_DAY, s.getStop().getHour());
-        sStopCal.set(GregorianCalendar.MINUTE, s.getStop().getMinute());
-        Long shiftStop = sStopCal.getTimeInMillis();
+        GregorianCalendar stopGC = (GregorianCalendar) orginialCalender.clone();
+        stopGC.set(GregorianCalendar.HOUR_OF_DAY, s.getStop().getHour());
+        stopGC.set(GregorianCalendar.MINUTE, s.getStop().getMinute());
+        Long shiftStop = stopGC.getTimeInMillis();
+        
+        //Lunchs
+        GregorianCalendar lunchStartGC = (GregorianCalendar) orginialCalender.clone();
+        lunchStartGC.set(GregorianCalendar.HOUR_OF_DAY, s.getStop().getHour());
+        lunchStartGC.set(GregorianCalendar.MINUTE, s.getStop().getMinute());
+        Long lunchStart = lunchStartGC.getTimeInMillis();
+        
+        GregorianCalendar lunchStopGC = (GregorianCalendar) orginialCalender.clone();
+        lunchStopGC.set(GregorianCalendar.HOUR_OF_DAY, s.getStop().getHour());
+        lunchStopGC.set(GregorianCalendar.MINUTE, s.getStop().getMinute());
+        Long lunchStop = lunchStopGC.getTimeInMillis();
         
         
         //Checks is punch lands on a Saturday or Sunday 
@@ -133,6 +145,7 @@ public class Punch {
             
             }
         }
+    
     
     public String printOriginalTimestamp(){
         String s = "#";
