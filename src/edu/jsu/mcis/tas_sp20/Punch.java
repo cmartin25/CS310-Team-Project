@@ -168,13 +168,32 @@ public class Punch {
         
         s += (df.format(d)).toUpperCase();
         
-        
         return s;
     }
     
     public String printAdjustedTimestamp() {
-        String s = "";
-        s = "Badge #: " + this.getBadge();
+        String s = "#";
+        String badgeid = this.badge.getBadgeID();
+        s += badgeid;
+        
+        switch (this.getPunchtypeid()){
+            case 0:
+                s += " CLOCKED OUT: ";
+                break;
+            case 1:
+                s += " CLOCKED IN: ";
+                break;
+            case 2:
+                s += " TIMED OUT: ";
+        }
+        
+        DateFormat df = new SimpleDateFormat("EEE MM/dd/yyyy HH:mm:ss");
+        Date d = new Date(this.originaltimestamp);
+        
+        s += (df.format(d)).toUpperCase();
+        
+        s += " " + (this.getAdjustmentType());
+        
         return s;
     }
     
