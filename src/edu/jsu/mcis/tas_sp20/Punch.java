@@ -106,7 +106,7 @@ public class Punch {
     public void adjust(Shift s) {
         
         long shiftInterval = s.getInterval() * 60000;
-        long shiftDock = s.getdock() * 60000;
+        long shiftDock = s.getDock() * 60000;
         long shiftGrace = s.getGracePeriod() * 60000;
         
        

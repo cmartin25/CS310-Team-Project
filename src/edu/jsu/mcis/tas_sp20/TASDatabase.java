@@ -388,7 +388,7 @@ public class TASDatabase {
             
             pstSelect.setInt(1, p.getTerminalid());
             pstSelect.setInt(4, p.getPunchtypeid());
-            pstSelect.setString(2, p.getBadgeid());
+            pstSelect.setString(2, p.getBadgeID());
             pstSelect.setString(3, (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"))
                     .format(calendar.getTime()));
                 

@@ -36,80 +36,82 @@ public class Shift {
             return this.id;
     }
 
+    //Set methods
     public void setID(int id) {
             this.id = id;
-    }
-
-    public String getDescription() {
-            return this.description;
     }
 
     public void setDescription(String description) {
             this.description = description;
     }
 
-    public LocalTime getStart() {
-            return this.start;
+    public void setInterval(int interval) {
+            this.interval = interval;
     }
-
+    
     public void setStart(LocalTime start) {
             this.start = start;
-    }
-
-    public LocalTime getStop() {
-            return this.stop;
     }
 
     public void setStop(LocalTime stop) {
             this.stop = stop;
     }
-
-    public int getGracePeriod() {
-            return this.graceperiod;
-    }
-
+    
     public void setGracePeriod(int graceperiod) {
             this.start = start;
     }
+    
+    public void setDock(int dock) {
+            this.dock = dock;
+    }
+    
+    public void setLunchStart(LocalTime lunchstart) {
+        this.lunchstart = lunchstart;
+    }
 
+    public void setLunchStop(LocalTime lunchstop) {
+            this.lunchstop = lunchstop;
+    }
+    
+    public void setLunchDeduct(int lunchdeduct) {
+        this.lunchdeduct = lunchdeduct;
+    }
+
+    //Getter methods
+    public String getDescription() {
+        return this.description;
+    }
+    
     public int getInterval() {
             return this.interval;
     }
 
-    public void setInterval(int interval) {
-            this.interval = interval;
+    public LocalTime getStart() {
+            return this.start;
     }
-
-    public int getdock() {
+    
+    public LocalTime getStop() {
+            return this.stop;
+    }
+    
+    public int getGracePeriod() {
+            return this.graceperiod;
+    }
+    
+    public int getDock() {
             return this.dock;
-    }
-
-    public void setdock(int dock) {
-            this.dock = dock;
     }
 
     public LocalTime getLunchStart() {
             return this.lunchstart = lunchstart;
     }
 
-    public void setLunchStart(LocalTime lunchstart) {
-            this.lunchstart = lunchstart;
-    }
-
     public LocalTime getLunchStop() {
             return this.lunchstop;
     }
 
-    public void setLunchStop(LocalTime lunchstop) {
-            this.lunchstop = lunchstop;
-    }
-
     public int getLunchDeduct() {
             return this.lunchdeduct;
-    }
-
-    public void setLunchDeduct(int lunchdeduct) {
-            this.lunchdeduct = lunchdeduct;
     }
     
     @Override

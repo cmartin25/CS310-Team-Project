@@ -30,7 +30,7 @@ public class Feature2 {
 		
         /* Get Punch Properties */
         
-        String badgeid = p1.getBadgeid();
+        String badgeid = p1.getBadgeID();
         
         ots.setTimeInMillis(p1.getOriginaltimestamp());
         String originaltimestamp = (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(ots.getTime());
@@ -48,7 +48,7 @@ public class Feature2 {
 		
         /* Compare Punches */
 
-        assertEquals(badgeid, p2.getBadgeid());
+        assertEquals(badgeid, p2.getBadgeID());
 
         rts.setTimeInMillis(p2.getOriginaltimestamp());
         
