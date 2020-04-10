@@ -25,25 +25,19 @@ public class TASDatabase {
         TASDatabase db = new TASDatabase();
         db.getBadge("12565C60");
         System.out.println(db.getShift(1).toString());
-        
-        
     }
     
     public TASDatabase() {
         try {
             
-            System.out.println("Connecting to " + server + "...");
-
             Class.forName("com.mysql.jdbc.Driver").newInstance();
 
             conn = DriverManager.getConnection(server, username, password);
 
-            if (conn.isValid(0)) {
-
-            System.out.println("Connected Successfully!");
-            
-            }                   
+            if (conn.isValid(0))
+                System.out.println("Connected Successfully!");   
         }
+        
         catch (Exception e) {
         System.err.println(e.toString());    
         }
@@ -56,6 +50,7 @@ public class TASDatabase {
            conn.close();
            System.out.println("Connection Closed!");
         }
+       
        catch (Exception e) {
            System.err.println(e.toString());
        }
@@ -77,15 +72,11 @@ public class TASDatabase {
             pstSelect = conn.prepareStatement(query);
             pstSelect.setInt(1, punch);
                 
-            System.out.println("Submitting Query ...");
-                
             hasResults = pstSelect.execute();                
             resultset = pstSelect.getResultSet();
             metadata = resultset.getMetaData();
             columnCount = metadata.getColumnCount();
-                
-            System.out.println("Getting Results ...");
-                
+                                
             while ( hasResults || pstSelect.getUpdateCount() != -1 ) 
             {
                 if ( hasResults ) 
@@ -131,6 +122,7 @@ public class TASDatabase {
             } catch (Exception e) {} }
             
         }
+       
        Badge badge = this.getBadge(badgeid);
        
        Punch p = new Punch(terminalid, badge, originalTimeStamp, punchTypeid);
@@ -149,16 +141,12 @@ public class TASDatabase {
             
             pstSelect = conn.prepareStatement(query);
             pstSelect.setString(1, badge);
-                
-            System.out.println("Submitting Query ...");
-                
+                                
             hasResults = pstSelect.execute();                
             resultset = pstSelect.getResultSet();
             metadata = resultset.getMetaData();
             columnCount = metadata.getColumnCount(); 
-                
-            System.out.println("Getting Results ...");
-                
+                                
             while ( hasResults || pstSelect.getUpdateCount() != -1 ) 
             {
                 if ( hasResults ) 
@@ -200,6 +188,7 @@ public class TASDatabase {
             } catch (Exception e) {} }
             
         }
+        
         Badge b = new Badge(id, description);
         
         return b;
@@ -225,16 +214,12 @@ public class TASDatabase {
             
             pstSelect = conn.prepareStatement(query);
             pstSelect.setInt(1, shift);
-                
-            System.out.println("Submitting Query ...");
-                
+                        
             hasResults = pstSelect.execute();                
             resultset = pstSelect.getResultSet();
             metadata = resultset.getMetaData();
             columnCount = metadata.getColumnCount(); 
-                
-            System.out.println("Getting Results ...");
-                
+                                
             while ( hasResults || pstSelect.getUpdateCount() != -1 ) 
             {
                 if ( hasResults ) 
@@ -318,16 +303,12 @@ public class TASDatabase {
             
             pstSelect = conn.prepareStatement(query);
             pstSelect.setString(1, badgeid);
-                
-            System.out.println("Submitting Query ...");
-                
+                                
             hasResults = pstSelect.execute();                
             resultset = pstSelect.getResultSet();
             metadata = resultset.getMetaData();
             columnCount = metadata.getColumnCount(); 
-            
-            System.out.println("Getting Results ...");
-                
+                            
             while ( hasResults || pstSelect.getUpdateCount() != -1 ) 
             {
                 if ( hasResults ) 
@@ -391,14 +372,10 @@ public class TASDatabase {
             pstSelect.setString(2, p.getBadgeID());
             pstSelect.setString(3, (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"))
                     .format(calendar.getTime()));
-                
-            System.out.println("Submitting Query ...");
-                
+                                
             pstSelect.execute();                
             resultset = pstSelect.getGeneratedKeys();
-           
-            System.out.println("Getting Results ...");
-            
+                       
             resultset.first();
             
             return resultset.getInt(1);
@@ -439,16 +416,12 @@ public class TASDatabase {
         
         pstSelect.setString(1, badgeid);
         pstSelect.setString(2, date);
-        
-        System.out.println("Submitting Query ...");
-                
+                        
         hasResults = pstSelect.execute();                
         resultset = pstSelect.getResultSet();
         metadata = resultset.getMetaData();
         columnCount = metadata.getColumnCount(); 
-            
-        System.out.println("Getting Results ...");
-        
+                    
         while (resultset.next()){
            
             long time = resultset.getTimestamp("originaltimestamp").getTime();
@@ -478,5 +451,5 @@ public class TASDatabase {
     
         return dailyPunchList;
     }
- 
+    
 }
