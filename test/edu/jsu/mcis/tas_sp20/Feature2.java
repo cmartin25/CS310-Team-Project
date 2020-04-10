@@ -32,11 +32,11 @@ public class Feature2 {
         
         String badgeid = p1.getBadgeID();
         
-        ots.setTimeInMillis(p1.getOriginaltimestamp());
+        ots.setTimeInMillis(p1.getOriginalTimeStamp());
         String originaltimestamp = (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(ots.getTime());
         
-        int terminalid = p1.getTerminalid();
-        int eventtypeid = p1.getPunchtypeid();
+        int terminalid = p1.getTerminalID();
+        int eventtypeid = p1.getPunchTypeID();
 		
         /* Insert Punch Into Database */
         
@@ -50,11 +50,11 @@ public class Feature2 {
 
         assertEquals(badgeid, p2.getBadgeID());
 
-        rts.setTimeInMillis(p2.getOriginaltimestamp());
+        rts.setTimeInMillis(p2.getOriginalTimeStamp());
         
         assertEquals(originaltimestamp, (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(rts.getTime()));
-        assertEquals(terminalid, p2.getTerminalid());
-        assertEquals(eventtypeid, p2.getPunchtypeid());
+        assertEquals(terminalid, p2.getTerminalID());
+        assertEquals(eventtypeid, p2.getPunchTypeID());
         
     }
     

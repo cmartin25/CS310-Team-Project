@@ -32,7 +32,7 @@ public class Feature5 {
 		
         /* Get Daily Punch List */
         
-        ArrayList<Punch> dailypunchlist = db.getDailyPunchList(b, p.getOriginaltimestamp());
+        ArrayList<Punch> dailypunchlist = db.getDailyPunchList(b, p.getOriginalTimeStamp());
         
         /* Adjust Punches */
         
@@ -69,7 +69,7 @@ public class Feature5 {
         
         /* Get Daily Punch List */
         
-        ArrayList<Punch> dailypunchlist = db.getDailyPunchList(b, p.getOriginaltimestamp());
+        ArrayList<Punch> dailypunchlist = db.getDailyPunchList(b, p.getOriginalTimeStamp());
         
         /* Adjust Punches */
         
@@ -106,7 +106,7 @@ public class Feature5 {
         
         /* Get Daily Punch List */
         
-        ArrayList<Punch> dailypunchlist = db.getDailyPunchList(b, p.getOriginaltimestamp());
+        ArrayList<Punch> dailypunchlist = db.getDailyPunchList(b, p.getOriginalTimeStamp());
         
         /* Adjust Punches */
         

@@ -45,14 +45,14 @@ public class Punch {
         this.badge = badge;
     }
     
-    public void setPunchTypeID(int punchtypeid){
-        this.punchtypeid = punchtypeid;
-    }
-        
     public void setID(int id){
         this.id = id;
     }
     
+    public void setPunchTypeID(int punchtypeid){
+        this.punchtypeid = punchtypeid;
+    }
+        
     public void setTerminalID(int terminalid){
         this.terminalid = terminalid;
     }
@@ -65,7 +65,7 @@ public class Punch {
         this.originaltimestamp = originaltimestamp;
     }
     
-    public void setAdjustedTimestamp(Long adjustedtimestamp){
+    public void setAdjustedTimeStamp(Long adjustedtimestamp){
         this.adjustedtimestamp = adjustedtimestamp;
     }
     
@@ -78,15 +78,11 @@ public class Punch {
         return this.id;
     }
     
-    public int getPunchtypeid(){
+    public int getPunchTypeID(){
         return this.punchtypeid;
     }
-    
-    public Long getOriginaltimestamp(){
-        return this.originaltimestamp;
-    }
-    
-    public int getTerminalid(){
+
+    public int getTerminalID(){
         return this.terminalid;
     }
     
@@ -94,7 +90,11 @@ public class Punch {
         return this.adjustmenttype;
     }
     
-    public Long getAdjustedTimestamp(){
+    public Long getOriginalTimeStamp(){
+        return this.originaltimestamp;
+    }
+    
+    public Long getAdjustedTimeStamp(){
         return this.adjustedtimestamp;
     }
     
@@ -102,7 +102,7 @@ public class Punch {
         return this.badge.getBadgeID();
     }
     
-     
+    
     public void adjust(Shift s) {
         
         long shiftInterval = s.getInterval() * 60000;
@@ -112,8 +112,8 @@ public class Punch {
        
        //Creates orginal calendar and converts shfit times to GC and Long objects
         GregorianCalendar orginialCalender = new GregorianCalendar();
-            orginialCalender.setTimeInMillis(this.getOriginaltimestamp());
-            orginialCalender.clear(GregorianCalendar.SECOND);
+        orginialCalender.setTimeInMillis(this.getOriginalTimeStamp());
+        orginialCalender.clear(GregorianCalendar.SECOND);
         Long punchTime = orginialCalender.getTimeInMillis();
         
         //Pulls from orginial calendar
@@ -142,17 +142,68 @@ public class Punch {
         
         //Checks is punch lands on a Saturday or Sunday 
         if ((orginialCalender.get(GregorianCalendar.DAY_OF_WEEK) != GregorianCalendar.SATURDAY) && (orginialCalender.get(GregorianCalendar.DAY_OF_WEEK) != GregorianCalendar.SUNDAY)){
+            switch (this.getPunchTypeID()){
+                
+                //Clock IN'S
+                case 0:
+                    
+                     //EARLY clock-in IN valid interval
+                    if ((punchTime >= shiftStart - shiftInterval) && (punchTime <= shiftStart)) {
+                        this.setAdjustedTimeStamp(shiftStart);
+                        this.setAdjustmentType("(Shift Start)");
+                    } else
+
+                    //LATE clock-in IN grace period
+                    if ((punchTime >= shiftStart)&& (punchTime <= shiftStart + shiftGrace)){
+                        this.setAdjustedTimeStamp(shiftStart);
+                        this.setAdjustmentType("(Shift Start)");
+                    } else
+
+                    //LATE clock-in NOT IN grace period
+                    //Within dock
+                    if ((punchTime >= shiftStart + shiftGrace) && (punchTime <= shiftStart + shiftDock)){
+                        this.setAdjustedTimeStamp(shiftStart + shiftDock);
+                        this.setAdjustmentType("(Shift Dock)");
+                    } else
+                    
+                    //If clock-in time is not on an even interval, then round to the closest interval possible
+                    if (punchTime % shiftInterval != 0){
+                        
+                        if (shiftInterval / 2 > this.getOriginalTimeStamp() % shiftInterval)
+                            punchTime = Math.round((long)punchTime/(shiftInterval) ) * (shiftInterval);
+                        
+                        else
+                            punchTime = Math.round((long)(punchTime + shiftInterval)/(shiftInterval)) * (shiftInterval);
+                        
+                        this.setAdjustedTimeStamp(punchTime);
+                        this.setAdjustmentType("(Interval Round)");
+                    
+                    } 
+                    
+                    //NEED TO ADD LUNCH CLOCK-IN
+                    
+                    
+                    //Make no changes
+                    else
+                        this.setAdjustmentType("(None)");
+                    
+                break;
+                    
+                //Clock OUT'S    
+                case 1:
             
             }
+        
         }
     
+    }
     
     public String printOriginalTimestamp(){
         String s = "#";
         String badgeid = this.badge.getBadgeID();
         s += badgeid;
         
-        switch (this.getPunchtypeid()){
+        switch (this.getPunchTypeID()){
             case 0:
                 s += " CLOCKED OUT: ";
                 break;
@@ -176,7 +227,7 @@ public class Punch {
         String badgeid = this.badge.getBadgeID();
         s += badgeid;
         
-        switch (this.getPunchtypeid()){
+        switch (this.getPunchTypeID()){
             case 0:
                 s += " CLOCKED OUT: ";
                 break;

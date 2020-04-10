@@ -371,10 +371,10 @@ public class TASDatabase {
     public int insertPunch(Punch p) {
         
         String badgeID = p.getBadge().getBadgeID();
-        int terminalID = p.getTerminalid();
-        int punchTypeID = p.getPunchtypeid();
+        int terminalID = p.getTerminalID();
+        int punchTypeID = p.getPunchTypeID();
         int newPunchID = p.getID();
-        Long originalTimeStamp = p.getOriginaltimestamp();
+        Long originalTimeStamp = p.getOriginalTimeStamp();
         Timestamp ts = new Timestamp(originalTimeStamp);
         GregorianCalendar calendar = new GregorianCalendar();
         calendar.setTimeInMillis(originalTimeStamp);
@@ -386,8 +386,8 @@ public class TASDatabase {
             
             pstSelect = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             
-            pstSelect.setInt(1, p.getTerminalid());
-            pstSelect.setInt(4, p.getPunchtypeid());
+            pstSelect.setInt(1, p.getTerminalID());
+            pstSelect.setInt(4, p.getPunchTypeID());
             pstSelect.setString(2, p.getBadgeID());
             pstSelect.setString(3, (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"))
                     .format(calendar.getTime()));
