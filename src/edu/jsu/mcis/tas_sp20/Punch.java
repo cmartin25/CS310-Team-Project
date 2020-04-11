@@ -142,6 +142,7 @@ public class Punch {
         
         //Checks is punch lands on a Saturday or Sunday 
         if ((orginialCalender.get(GregorianCalendar.DAY_OF_WEEK) != GregorianCalendar.SATURDAY) && (orginialCalender.get(GregorianCalendar.DAY_OF_WEEK) != GregorianCalendar.SUNDAY)){
+            
             switch (this.getPunchTypeID()){
                 
                 //Clock IN'S
@@ -149,21 +150,27 @@ public class Punch {
                     
                      //EARLY clock-in IN valid interval
                     if ((punchTime >= shiftStart - shiftInterval) && (punchTime <= shiftStart)) {
+                    
                         this.setAdjustedTimeStamp(shiftStart);
                         this.setAdjustmentType("(Shift Start)");
+                    
                     } else
 
                     //LATE clock-in IN grace period
                     if ((punchTime >= shiftStart)&& (punchTime <= shiftStart + shiftGrace)){
+                    
                         this.setAdjustedTimeStamp(shiftStart);
                         this.setAdjustmentType("(Shift Start)");
+                    
                     } else
 
                     //LATE clock-in NOT IN grace period
                     //Within dock
                     if ((punchTime >= shiftStart + shiftGrace) && (punchTime <= shiftStart + shiftDock)){
+                    
                         this.setAdjustedTimeStamp(shiftStart + shiftDock);
                         this.setAdjustmentType("(Shift Dock)");
+                    
                     } else
                     
                     //If clock-in time is not on an even interval, then round to the closest interval possible
@@ -183,19 +190,78 @@ public class Punch {
                     //NEED TO ADD LUNCH CLOCK-IN
                     
                     
-                    //Make no changes
-                    else
+                    //No changes needed (drop seconds)
+                    else {
+                        
+                        this.setAdjustedTimeStamp(punchTime);
                         this.setAdjustmentType("(None)");
-                    
+                    }
+                        
                 break;
                     
                 //Clock OUT'S    
                 case 1:
             
-            }
-        
-        }
+                    //EARLY clock-out IN grace period
+                    if ((punchTime <= shiftStop) && (punchTime >= shiftStop - shiftGrace)){
+                    
+                        this.setAdjustedTimeStamp(shiftStop);
+                        this.setAdjustmentType("(Shift Stop)");
+                    
+                    } else
+
+                    //LATE clock-out NOT IN grace period
+                    //Within dock    
+                    if ((punchTime <= shiftStop - shiftGrace) && (punchTime >= shiftStop - shiftDock)){
+                        
+                        this.setAdjustedTimeStamp(shiftStop - shiftDock);
+                        this.setAdjustmentType("(Shift Dock)");
+                    
+                    } else
+                    
+                    //LATE clock-out IN valid interval    
+                    if ((punchTime >= shiftStop) && (punchTime <= shiftStop + shiftInterval)){
+                        
+                        this.setAdjustedTimeStamp(shiftStop);
+                        this.setAdjustmentType("(Shift Stop)");
+                        
+                    } else
+                    
+                    //If clock-out time is not on an even interval, then round to the closest interval possible
+                    if (punchTime % shiftInterval != 0){
+                        
+                        if ((shiftInterval / 2) > (this.getOriginalTimeStamp() % shiftInterval)){
+                            punchTime = Math.round((long)punchTime/(shiftInterval) ) * (shiftInterval);
+                        } 
+                        
+                        else {
+                            punchTime = Math.round((long)(punchTime + shiftInterval)/(shiftInterval) ) * (shiftInterval);
+                        }
+                        
+                        this.setAdjustedTimeStamp(punchTime);
+                        this.setAdjustmentType("(Interval Round)");
+                    } 
+                    
+                    
+                    
+                    //NEED TO ADD LUNCH 
+                    
+                    
+                    
+                    //No changes needed (drop seconds)
+                    else {
+                    
+                        this.setAdjustedTimeStamp(punchTime); //Needed to clear Seconds field
+                        this.setAdjustmentType("(None)");
+                    
+                    }
+                    
+                    break;  
+                        
+                }
     
+        }
+        
     }
     
     public String printOriginalTimestamp(){
