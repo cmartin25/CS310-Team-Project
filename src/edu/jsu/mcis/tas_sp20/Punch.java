@@ -128,17 +128,16 @@ public class Punch {
         stopGC.set(GregorianCalendar.MINUTE, s.getStop().getMinute());
         Long shiftStop = stopGC.getTimeInMillis();
         
-        //Lunchs
+        //Lunches
         GregorianCalendar lunchStartGC = (GregorianCalendar) orginialCalender.clone();
-        lunchStartGC.set(GregorianCalendar.HOUR_OF_DAY, s.getStop().getHour());
-        lunchStartGC.set(GregorianCalendar.MINUTE, s.getStop().getMinute());
+        lunchStartGC.set(GregorianCalendar.HOUR_OF_DAY, s.getLunchStart().getHour());
+        lunchStartGC.set(GregorianCalendar.MINUTE, s.getLunchStart().getMinute());
         Long lunchStart = lunchStartGC.getTimeInMillis();
         
         GregorianCalendar lunchStopGC = (GregorianCalendar) orginialCalender.clone();
-        lunchStopGC.set(GregorianCalendar.HOUR_OF_DAY, s.getStop().getHour());
-        lunchStopGC.set(GregorianCalendar.MINUTE, s.getStop().getMinute());
+        lunchStopGC.set(GregorianCalendar.HOUR_OF_DAY, s.getLunchStop().getHour());
+        lunchStopGC.set(GregorianCalendar.MINUTE, s.getLunchStop().getMinute());
         Long lunchStop = lunchStopGC.getTimeInMillis();
-        
         
         //Checks is punch lands on a Saturday or Sunday 
         if ((orginialCalender.get(GregorianCalendar.DAY_OF_WEEK) != GregorianCalendar.SATURDAY) && (orginialCalender.get(GregorianCalendar.DAY_OF_WEEK) != GregorianCalendar.SUNDAY)){
@@ -146,13 +145,13 @@ public class Punch {
             switch (this.getPunchTypeID()){
                 
                 //Clock IN'S
-                case 0:
+                case 1:
                     
                      //EARLY clock-in IN valid interval
                     if ((punchTime >= shiftStart - shiftInterval) && (punchTime <= shiftStart)) {
                     
                         this.setAdjustedTimeStamp(shiftStart);
-                        this.setAdjustmentType("(Shift Start)");
+                        this.setAdjustmentType("Shift Start");
                     
                     } else
 
@@ -160,19 +159,26 @@ public class Punch {
                     if ((punchTime >= shiftStart)&& (punchTime <= shiftStart + shiftGrace)){
                     
                         this.setAdjustedTimeStamp(shiftStart);
-                        this.setAdjustmentType("(Shift Start)");
+                        this.setAdjustmentType("Shift Start");
                     
                     } else
 
                     //LATE clock-in NOT IN grace period
                     //Within dock
-                    if ((punchTime >= shiftStart + shiftGrace) && (punchTime <= shiftStart + shiftDock)){
+                    if ((punchTime >= shiftStart + shiftGrace) && (punchTime <= shiftStart + shiftInterval)){
                     
                         this.setAdjustedTimeStamp(shiftStart + shiftDock);
-                        this.setAdjustmentType("(Shift Dock)");
+                        this.setAdjustmentType("Shift Dock");
                     
                     } else
                     
+                    if ((punchTime <= lunchStop) && (punchTime >= lunchStart)){
+                        this.setAdjustedTimeStamp(lunchStop);
+                        this.setAdjustmentType("Lunch Stop" );
+                        }   
+                    
+                    else
+                        
                     //If clock-in time is not on an even interval, then round to the closest interval possible
                     if (punchTime % shiftInterval != 0){
                         
@@ -183,30 +189,27 @@ public class Punch {
                             punchTime = Math.round((long)(punchTime + shiftInterval)/(shiftInterval)) * (shiftInterval);
                         
                         this.setAdjustedTimeStamp(punchTime);
-                        this.setAdjustmentType("(Interval Round)");
+                        this.setAdjustmentType("Interval Round");
                     
-                    } 
-                    
-                    //NEED TO ADD LUNCH CLOCK-IN
-                    
+                        } 
                     
                     //No changes needed (drop seconds)
                     else {
                         
                         this.setAdjustedTimeStamp(punchTime);
-                        this.setAdjustmentType("(None)");
+                        this.setAdjustmentType("None");
                     }
                         
                 break;
                     
                 //Clock OUT'S    
-                case 1:
+                case 0:
             
                     //EARLY clock-out IN grace period
                     if ((punchTime <= shiftStop) && (punchTime >= shiftStop - shiftGrace)){
                     
                         this.setAdjustedTimeStamp(shiftStop);
-                        this.setAdjustmentType("(Shift Stop)");
+                        this.setAdjustmentType("Shift Stop");
                     
                     } else
 
@@ -215,7 +218,7 @@ public class Punch {
                     if ((punchTime <= shiftStop - shiftGrace) && (punchTime >= shiftStop - shiftDock)){
                         
                         this.setAdjustedTimeStamp(shiftStop - shiftDock);
-                        this.setAdjustmentType("(Shift Dock)");
+                        this.setAdjustmentType("Shift Dock");
                     
                     } else
                     
@@ -223,10 +226,15 @@ public class Punch {
                     if ((punchTime >= shiftStop) && (punchTime <= shiftStop + shiftInterval)){
                         
                         this.setAdjustedTimeStamp(shiftStop);
-                        this.setAdjustmentType("(Shift Stop)");
+                        this.setAdjustmentType("Shift Stop");
                         
                     } else
                     
+                    if ((punchTime >= lunchStart) && (punchTime <= lunchStop)){
+                        this.setAdjustedTimeStamp(lunchStart);
+                        this.setAdjustmentType("Lunch Start" );
+                    }
+                    else
                     //If clock-out time is not on an even interval, then round to the closest interval possible
                     if (punchTime % shiftInterval != 0){
                         
@@ -239,20 +247,15 @@ public class Punch {
                         }
                         
                         this.setAdjustedTimeStamp(punchTime);
-                        this.setAdjustmentType("(Interval Round)");
+                        this.setAdjustmentType("Interval Round");
                     } 
-                    
-                    
-                    
-                    //NEED TO ADD LUNCH 
-                    
-                    
                     
                     //No changes needed (drop seconds)
                     else {
                     
                         this.setAdjustedTimeStamp(punchTime); //Needed to clear Seconds field
-                        this.setAdjustmentType("(None)");
+                        this.setAdjustmentType("None");
+                        
                     
                     }
                     
@@ -260,10 +263,32 @@ public class Punch {
                         
                 }
     
-        }
+            } else {
+                if (punchTime % shiftInterval != 0){
+
+                            if ((shiftInterval / 2) > (this.getOriginalTimeStamp() % shiftInterval)){
+                                punchTime = Math.round((long)punchTime/(shiftInterval) ) * (shiftInterval);
+                            } 
+
+                            else {
+                                punchTime = Math.round((long)(punchTime + shiftInterval)/(shiftInterval) ) * (shiftInterval);
+                            }
+
+                            this.setAdjustedTimeStamp(punchTime);
+                            this.setAdjustmentType("Interval Round");
+                        } 
+
+                        //No changes needed (drop seconds)
+                        else {
+
+                            this.setAdjustedTimeStamp(punchTime); //Needed to clear Seconds field
+                            this.setAdjustmentType("None");
+
+
+                        }
         
+             }
     }
-    
     public String printOriginalTimestamp(){
         String s = "#";
         String badgeid = this.badge.getBadgeID();
@@ -305,11 +330,11 @@ public class Punch {
         }
         
         DateFormat df = new SimpleDateFormat("EEE MM/dd/yyyy HH:mm:ss");
-        Date d = new Date(this.originaltimestamp);
+        Date d = new Date(this.adjustedtimestamp);
         
         s += (df.format(d)).toUpperCase();
         
-        s += " " + (this.getAdjustmentType());
+        s += " (" + (this.getAdjustmentType()) + ")";
         
         return s;
     }
