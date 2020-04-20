@@ -12,7 +12,7 @@ public class Badge {
         
     }
     
-    public String getBadgeID(){
+    public String getBadgeid(){
         return badgeID;
     }
     

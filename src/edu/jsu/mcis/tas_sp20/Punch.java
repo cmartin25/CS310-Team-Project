@@ -98,8 +98,8 @@ public class Punch {
         return this.adjustedtimestamp;
     }
     
-     public String getBadgeID() {
-        return this.badge.getBadgeID();
+     public String getBadgeid() {
+        return this.badge.getBadgeid();
     }
     
     
@@ -291,7 +291,7 @@ public class Punch {
     }
     public String printOriginalTimestamp(){
         String s = "#";
-        String badgeid = this.badge.getBadgeID();
+        String badgeid = this.badge.getBadgeid();
         s += badgeid;
         
         switch (this.getPunchTypeID()){
@@ -315,7 +315,7 @@ public class Punch {
     
     public String printAdjustedTimestamp() {
         String s = "#";
-        String badgeid = this.badge.getBadgeID();
+        String badgeid = this.badge.getBadgeid();
         s += badgeid;
         
         switch (this.getPunchTypeID()){

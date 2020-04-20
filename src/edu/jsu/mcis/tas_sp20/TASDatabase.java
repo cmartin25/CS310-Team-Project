@@ -295,7 +295,7 @@ public class TASDatabase {
     public Shift getShift(Badge badge){
         
         Shift shift = null;
-        String badgeid = badge.getBadgeID();
+        String badgeid = badge.getBadgeid();
         
         try{
             
@@ -351,7 +351,7 @@ public class TASDatabase {
     
     public int insertPunch(Punch p) {
         
-        String badgeID = p.getBadge().getBadgeID();
+        String badgeID = p.getBadge().getBadgeid();
         int terminalID = p.getTerminalID();
         int punchTypeID = p.getPunchTypeID();
         int newPunchID = p.getID();
@@ -369,7 +369,7 @@ public class TASDatabase {
             
             pstSelect.setInt(1, p.getTerminalID());
             pstSelect.setInt(4, p.getPunchTypeID());
-            pstSelect.setString(2, p.getBadgeID());
+            pstSelect.setString(2, p.getBadgeid());
             pstSelect.setString(3, (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"))
                     .format(calendar.getTime()));
                                 
@@ -405,7 +405,7 @@ public class TASDatabase {
         SimpleDateFormat formattedDate = new SimpleDateFormat("yyyy-MM-dd");
         String date = formattedDate.format(calendar.getTime());
         date += "%";
-        String badgeid = badge.getBadgeID();
+        String badgeid = badge.getBadgeid();
         
     try {
             
